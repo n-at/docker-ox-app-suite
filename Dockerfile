@@ -6,11 +6,12 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && \
     apt-get upgrade -y && \
-    apt-get install -y apt-transport-https
+    apt-get install -y apt-transport-https wget
 
 ADD open-xchange.list /etc/apt/sources.list.d/open-xchange.list
 
-RUN apt-get update && \
+RUN wget http://software.open-xchange.com/oxbuildkey.pub -O - | apt-key add - && \
+    apt-get update && \
     apt-get install --force-yes -y \
         vim \
         mysql-server \
