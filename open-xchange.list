@@ -1,0 +1,6 @@
+deb https://software.open-xchange.com/products/appsuite/stable/appsuiteui/DebianWheezy/ /
+deb https://software.open-xchange.com/products/appsuite/stable/backend/DebianWheezy/ /
+deb https://software.open-xchange.com/products/appsuite/stable/office/DebianWheezy /
+deb https://software.open-xchange.com/products/appsuite/stable/office-web/DebianWheezy /
+deb https://software.open-xchange.com/products/appsuite/stable/documentconverter-api/DebianWheezy /
+deb https://software.open-xchange.com/products/appsuite/stable/calcengine/DebianWheezy/ /
