@@ -48,13 +48,16 @@ sed -i 's/# com.openexchange.capability.spreadsheet/com.openexchange.capability.
 
 #Start OX
 service open-xchange start
-sleep 10
 
 #Server instance registration
-/opt/open-xchange/sbin/registerserver \
-    -n ${OX_SERVER_NAME} \
-    -A ${OX_ADMIN_MASTER_LOGIN} \
-    -P ${OX_ADMIN_MASTER_PASSWORD}
+while ! /opt/open-xchange/sbin/registerserver \
+            -n ${OX_SERVER_NAME} \
+            -A ${OX_ADMIN_MASTER_LOGIN} \
+            -P ${OX_ADMIN_MASTER_PASSWORD}
+do
+    echo "Waiting OX to start..."
+    sleep 5
+done;
 
 #Register filestore
 /opt/open-xchange/sbin/registerfilestore \

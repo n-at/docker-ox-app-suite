@@ -23,9 +23,9 @@ RUN wget http://software.open-xchange.com/oxbuildkey.pub -O - | apt-key add - &&
         open-xchange-appsuite \
         open-xchange-appsuite-backend \
         open-xchange-appsuite-manifest \
-        open-xchange-l10n-ru-ru \
-        open-xchange-lang-community-ru-ru \
-        open-xchange-appsuite-l10n-ru-ru \
+        open-xchange-l10n-* \
+        open-xchange-lang-community-* \
+        open-xchange-appsuite-l10n-* \
         open-xchange-documents-backend \
         open-xchange-documentconverter-api \
         open-xchange-documents-ui \

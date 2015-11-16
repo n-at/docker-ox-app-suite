@@ -10,6 +10,22 @@ text and spreadsheet editors.
 For proper configuration instructions refer the 
 [official knowledge base](http://knowledgebase.open-xchange.com/start.html).
 
+Building image
+--------------
+
+Before use you need to build the image.
+
+[Docker](http://docker.io) should be installed and running.
+
+Clone repository:
+
+    git clone https://github.com/n-at/docker-ox-app-suite.git
+    cd docker-ox-app-suite
+
+Build image (with tag `ox`):
+
+    docker build -t ox .
+
 Usage
 -----
 
