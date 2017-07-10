@@ -1,6 +1,6 @@
-deb https://software.open-xchange.com/products/appsuite/stable/appsuiteui/DebianWheezy/ /
-deb https://software.open-xchange.com/products/appsuite/stable/backend/DebianWheezy/ /
-deb https://software.open-xchange.com/products/appsuite/stable/office/DebianWheezy /
-deb https://software.open-xchange.com/products/appsuite/stable/office-web/DebianWheezy /
-deb https://software.open-xchange.com/products/appsuite/stable/documentconverter-api/DebianWheezy /
-deb https://software.open-xchange.com/products/appsuite/stable/calcengine/DebianWheezy/ /
+deb https://software.open-xchange.com/products/appsuite/7.6.3/appsuiteui/DebianWheezy/ /
+deb https://software.open-xchange.com/products/appsuite/7.6.3/backend/DebianWheezy/ /
+deb https://software.open-xchange.com/products/appsuite/7.6.3/office/DebianWheezy /
+deb https://software.open-xchange.com/products/appsuite/7.6.3/office-web/DebianWheezy /
+deb https://software.open-xchange.com/products/appsuite/7.6.3/documentconverter-api/DebianWheezy /
+deb https://software.open-xchange.com/products/appsuite/7.6.3/calcengine/DebianWheezy/ /
