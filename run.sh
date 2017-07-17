@@ -1,5 +1,6 @@
 #!/bin/bash
 
+OX_CONFIG_DATABASE_USER=${OX_CONFIG_DATABASE_USER:-"openxchange"}
 OX_CONFIG_DATABASE_PASSWORD=${OX_CONFIG_DATABASE_PASSWORD:-"db_password"}
 
 OX_ADMIN_MASTER_LOGIN=${OX_ADMIN_MASTER_LOGIN:-"oxadminmaster"}
@@ -28,14 +29,24 @@ service mysql start
 
 #Create config database
 /opt/open-xchange/sbin/initconfigdb \
+    --configdb-user=${OX_CONFIG_DATABASE_USER} \
     --configdb-pass=${OX_CONFIG_DATABASE_PASSWORD} \
-    -a
+    --configdb-dbname=configdb \
+    --configdb-host=localhost \
+    --configdb-port=3306 \
+    -a -i
 
 #Create server instance config
 /opt/open-xchange/sbin/oxinstaller \
     --no-license \
     --servername=${OX_SERVER_NAME} \
+    --configdb-user=${OX_CONFIG_DATABASE_USER} \
     --configdb-pass=${OX_CONFIG_DATABASE_PASSWORD} \
+    --configdb-readhost=localhost \
+    --configdb-readport=3306 \
+    --configdb-writehost=localhost \
+    --configdb-writeport=3306 \
+    --configdb-dbname=configdb \
     --master-pass=${OX_ADMIN_MASTER_PASSWORD} \
     --network-listener-host=localhost \
     --servermemory ${OX_SERVER_MEMORY}
@@ -51,9 +62,9 @@ service open-xchange start
 
 #Server instance registration
 while ! /opt/open-xchange/sbin/registerserver \
-            -n ${OX_SERVER_NAME} \
-            -A ${OX_ADMIN_MASTER_LOGIN} \
-            -P ${OX_ADMIN_MASTER_PASSWORD}
+            --name=${OX_SERVER_NAME} \
+            --adminuser=${OX_ADMIN_MASTER_LOGIN} \
+            --adminpass=${OX_ADMIN_MASTER_PASSWORD}
 do
     echo "Waiting OX to start..."
     sleep 5
@@ -61,33 +72,39 @@ done;
 
 #Register filestore
 /opt/open-xchange/sbin/registerfilestore \
-    -A ${OX_ADMIN_MASTER_LOGIN} \
-    -P ${OX_ADMIN_MASTER_PASSWORD} \
-    -t file:/ox/store \
-    -s 1000000
+    --adminuser=${OX_ADMIN_MASTER_LOGIN} \
+    --adminpass=${OX_ADMIN_MASTER_PASSWORD} \
+    --storepath=file:/ox/store \
+    --storesize=1000000
 
 #Create groupware database
 /opt/open-xchange/sbin/registerdatabase \
-    -A ${OX_ADMIN_MASTER_LOGIN} \
-    -P ${OX_ADMIN_MASTER_PASSWORD} \
-    -n oxdatabase \
-    -p ${OX_CONFIG_DATABASE_PASSWORD} \
-    -m true
+    --adminuser=${OX_ADMIN_MASTER_LOGIN} \
+    --adminpass=${OX_ADMIN_MASTER_PASSWORD} \
+    --name=oxdatabase \
+    --hostname=localhost \
+    --dbuser=${OX_CONFIG_DATABASE_USER} \
+    --dbpasswd=${OX_CONFIG_DATABASE_PASSWORD} \
+    --master=true
 
 #Create context
-/opt/open-xchange/sbin/createcontext \
-    -A ${OX_ADMIN_MASTER_LOGIN} \
-    -P ${OX_ADMIN_MASTER_PASSWORD} \
-    -c ${OX_CONTEXT_ID} \
-    -u ${OX_CONTEXT_ADMIN_LOGIN} \
-    -p ${OX_CONTEXT_ADMIN_PASSWORD} \
-    -e ${OX_CONTEXT_ADMIN_EMAIL} \
-    -d "Context Admin" \
-    -g Admin \
-    -s Admin \
-    -L defaultcontext \
-    -q 1024 \
+while ! /opt/open-xchange/sbin/createcontext \
+    --adminuser=${OX_ADMIN_MASTER_LOGIN} \
+    --adminpass=${OX_ADMIN_MASTER_PASSWORD} \
+    --contextid=${OX_CONTEXT_ID} \
+    --username=${OX_CONTEXT_ADMIN_LOGIN} \
+    --password=${OX_CONTEXT_ADMIN_PASSWORD} \
+    --email=${OX_CONTEXT_ADMIN_EMAIL} \
+    --displayname="Context Admin" \
+    --givenname=Admin \
+    --surname=Admin \
+    --addmapping=defaultcontext \
+    --quota=1024 \
     --access-combination-name=groupware_standard
+do
+    echo "Waiting for mysql..."
+    sleep 5
+done
 
 #Start Apache2
 service apache2 start
